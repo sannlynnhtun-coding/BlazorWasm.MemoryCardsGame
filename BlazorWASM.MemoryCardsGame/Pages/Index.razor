@@ -1,0 +1,16 @@
+﻿@page "/"
+
+<button class="btn btn-success" @onclick=Generate>Generate</button>
+<ul class="cards">
+    @foreach (var item in lstCardNo)
+    {
+        <li class="card flip">
+           @* <div class="view front-view">
+                <img src="images/que_icon.svg" alt="icon">
+            </div>*@
+            <div class="view back-view">
+                <img src="images/img-@(item).png" alt="card-img">
+            </div>
+        </li>
+    }
+</ul>
