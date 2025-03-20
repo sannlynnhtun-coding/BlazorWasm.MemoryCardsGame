@@ -1,0 +1,120 @@
+﻿@page "/"
+
+<button class="btn btn-success" @onclick="Generate" disabled="@isProcessing">Start Game</button>
+<ul class="cards">
+    @foreach (var card in cards)
+    {
+        <li class="card flip" @onclick="() => FlipCard(card)">
+            <div class="view front-view" style="@(card.IsFlipped || card.IsMatched ? "display:none" : "")">
+                <img src="images/que_icon.svg" alt="icon">
+            </div>
+            <div class="view back-view" style="@(card.IsFlipped || card.IsMatched ? "" : "display:none")">
+                <img src="images/img-@(card.Number).png" alt="card-img">
+            </div>
+        </li>
+    }
+</ul>
+<div>
+    <p>Moves: @moves</p>
+    @if (gameWon)
+    {
+        <p>Congratulations! You won in @moves moves!</p>
+    }
+</div>
+
+@code {
+    public class Card
+    {
+        public int Number { get; set; }
+        public bool IsFlipped { get; set; }
+        public bool IsMatched { get; set; }
+    }
+
+    private List<Card> cards = new List<Card>();
+    private List<int> lstCardNo = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8 };
+    private int moves = 0;
+    private bool gameWon = false;
+    private bool isProcessing = false;
+    private List<Card> selectedCards = new List<Card>();
+
+    protected override void OnInitialized()
+    {
+        Generate();
+    }
+
+    async Task Generate()
+    {
+        isProcessing = true;
+        moves = 0;
+        gameWon = false;
+        selectedCards.Clear();
+
+        // Initialize cards
+        cards = lstCardNo.Select(n => new Card { Number = n }).ToList();
+
+        // Shuffle cards
+        Random random = new Random();
+        for (int i = 0; i < cards.Count; i++)
+        {
+            int j = random.Next(i, cards.Count);
+            var temp = cards[i];
+            cards[i] = cards[j];
+            cards[j] = temp;
+        }
+
+        // Show all cards briefly
+        foreach (var card in cards)
+        {
+            card.IsFlipped = true;
+            card.IsMatched = false;
+        }
+
+        StateHasChanged();
+        await Task.Delay(2000); // Show cards for 2 seconds
+
+        // Hide all cards
+        foreach (var card in cards)
+        {
+            card.IsFlipped = false;
+        }
+
+        isProcessing = false;
+        StateHasChanged();
+    }
+
+    async Task FlipCard(Card card)
+    {
+        if (isProcessing || card.IsFlipped || card.IsMatched)
+            return;
+
+        isProcessing = true;
+        card.IsFlipped = true;
+        selectedCards.Add(card);
+        StateHasChanged();
+
+        if (selectedCards.Count == 2)
+        {
+            moves++;
+            await Task.Delay(1000); // Show cards for 1 second before checking match
+
+            if (selectedCards[0].Number == selectedCards[1].Number)
+            {
+                selectedCards[0].IsMatched = true;
+                selectedCards[1].IsMatched = true;
+
+                // Check if game is won
+                gameWon = cards.All(c => c.IsMatched);
+            }
+            else
+            {
+                selectedCards[0].IsFlipped = false;
+                selectedCards[1].IsFlipped = false;
+            }
+
+            selectedCards.Clear();
+        }
+
+        isProcessing = false;
+        StateHasChanged();
+    }
+}
