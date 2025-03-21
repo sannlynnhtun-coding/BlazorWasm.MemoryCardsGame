@@ -1,22 +1,22 @@
 {
-  "name": "BlazorWasm.MemoryCardsGameV2",
-  "short_name": "BlazorWasm.MemoryCardsGameV2",
-  "id": "./",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#03173d",
-  "prefer_related_applications": false,
-  "icons": [
-    {
-      "src": "icon-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    },
-    {
-      "src": "icon-192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    }
-  ]
+    "name": "Blazor Wasm - Memory Card Game v2",
+    "short_name": "Memory Card Game",
+    "id": "./",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#6563FF",
+    "theme_color": "#03173d",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "https://blazor-wasm-memory-card-game-v2.vercel.app/favicon.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        },
+        {
+            "src": "https://blazor-wasm-memory-card-game-v2.vercel.app/favicon.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        }
+    ]
 }
